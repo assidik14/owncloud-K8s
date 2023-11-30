@@ -1,0 +1,14 @@
+# ConfigMap Owncloud Env
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: owncloud-env
+data:
+  OWNCLOUD_DB_TYPE: mysql
+  OWNCLOUD_DB_NAME: owndb
+  OWNCLOUD_DB_USERNAME: owncloud
+  OWNCLOUD_DB_PASSWORD: owncloud-password
+  OWNCLOUD_DB_HOST: mysql-container
+  OWNCLOUD_ADMIN_USERNAME: admin
+  OWNCLOUD_ADMIN_PASSWORD: admin-password
+  OWNCLOUD_MYSQL_UTF8MB4: "true"

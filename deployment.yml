@@ -1,0 +1,52 @@
+# Owncloud Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: owncloud
+  labels:
+    name: owncloud
+    env: development
+spec:
+  replicas: 2
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - owncloud
+      - key: team
+        operator: In
+        values:
+          - DC
+  template:
+    metadata:
+      name: owncloud
+      labels:
+        app: owncloud
+        team: DC
+    spec:
+      volumes:
+        - name: owncloud-data
+          hostPath: 
+            path: /mnt
+            type: Directory
+      containers:
+        - name: owncloud-container
+          image: owncloud:latest
+          ports:
+          - containerPort: 80
+          envFrom:
+          - configMapRef:
+             name: owncloud-env
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: owncloud-data
